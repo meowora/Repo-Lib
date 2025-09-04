@@ -115,7 +115,7 @@ public record RepoLocation(
         }
 
         val map = optionalMap.get();
-        val optionalIdValue = ops.getStringValue(map.get("id")).result();
+        val optionalIdValue = ops.getStringValue(map.get("repoLocation")).result();
 
         if (optionalIdValue.isEmpty()) {
             return null;
