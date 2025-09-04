@@ -7,6 +7,7 @@ import lombok.val;
 import org.intellij.lang.annotations.Pattern;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.repolib.core.utils.RepoCodec;
 import tech.thatgravyboat.repolib.core.utils.RepoUtils;
@@ -29,17 +30,17 @@ public record RepoLocation(
         return bySeparator(value, ':');
     }
 
-    public static RepoLocation bySeparator(String string, char c) {
-        val remainderIndex = string.indexOf(c);
+    public static RepoLocation bySeparator(@Subst("pet:sheep(:legendary)") String string, char c) {
+        @Subst("3") val remainderIndex = string.indexOf(c);
         if (remainderIndex > 0) {
-            String remainder = string.substring(remainderIndex + 1);
-            val variantIndex = remainder.indexOf(c);
-            String namespace = string.substring(0, remainderIndex);
+            @Subst("sheep") String remainder = string.substring(remainderIndex + 1);
+            @Subst("9") val variantIndex = remainder.indexOf(c);
+            @Subst("pet") String namespace = string.substring(0, remainderIndex);
             if (variantIndex == -1) {
                 return fromNamespaceAndPath(namespace, remainder);
             } else {
-                val path = remainder.substring(0, variantIndex);
-                val variant = remainder.substring(variantIndex + 1);
+                @Subst("sheep") val path = remainder.substring(0, variantIndex);
+                @Subst("legendary") val variant = remainder.substring(variantIndex + 1);
                 return fromNamespacePathAndVariant(namespace, path, variant);
             }
         }
@@ -126,7 +127,7 @@ public record RepoLocation(
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return namespace + ":" + path + (variant != null ? (":" + variant) : "");
     }
 }
