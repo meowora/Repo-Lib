@@ -1,4 +1,4 @@
 @NotNullByDefault
-package tech.thatgravyboat.repolib.core.data;
+package tech.thatgravyboat.repolib.core;
 
 import org.jetbrains.annotations.NotNullByDefault;

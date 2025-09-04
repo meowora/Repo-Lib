@@ -64,7 +64,7 @@ public record RepoLocation(
     static String ensureValidNamespace(String input, String path) {
         @Subst("item") val lowerInput = RepoUtils.lowercase(input);
         if (!isValidLocation(lowerInput)) {
-            throw new IllegalArgumentException("Non [a-z0-9_.-] character in namespace of location: " + input + ":" + path);
+            throw new IllegalArgumentException("Non [a-z0-9_-] character in namespace of location: " + input + ":" + path);
         }
         return lowerInput;
     }
@@ -73,7 +73,7 @@ public record RepoLocation(
     static String ensureValidPath(String namespace, String path) {
         @Subst("item") val lowerInput = RepoUtils.lowercase(path);
         if (!isValidLocation(lowerInput)) {
-            throw new IllegalArgumentException("Non [a-z0-9_.-] character in path of location: " + namespace + ":" + path);
+            throw new IllegalArgumentException("Non [a-z0-9_-] character in path of location: " + namespace + ":" + path);
         }
         return lowerInput;
     }
@@ -82,7 +82,7 @@ public record RepoLocation(
     static String ensureValidVariant(String namespace, String path, String variant) {
         @Subst("item") val lowerInput = RepoUtils.lowercase(variant);
         if (!isValidLocation(lowerInput)) {
-            throw new IllegalArgumentException("Non [a-z0-9_.-] character in variant of location: " + namespace + ":" + path + ":" + variant);
+            throw new IllegalArgumentException("Non [a-z0-9_-] character in variant of location: " + namespace + ":" + path + ":" + variant);
         }
         return lowerInput;
     }

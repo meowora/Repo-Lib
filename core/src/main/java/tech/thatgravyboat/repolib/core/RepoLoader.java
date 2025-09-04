@@ -1,12 +1,30 @@
 package tech.thatgravyboat.repolib.core;
 
+import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
+import lombok.val;
+import tech.thatgravyboat.repolib.core.storage.CompactRepoStorage;
+import tech.thatgravyboat.repolib.core.storage.DirectoryStorage;
+import tech.thatgravyboat.repolib.core.storage.RepoStorage;
+
+import java.nio.file.Path;
+import java.util.UUID;
+import java.util.function.Function;
 
 @UtilityClass
 public class RepoLoader {
 
-//    public RepoInstance load(Path path, boolean editMode) {
-//        return new RepoInstance(path, editMode);
-//    }
+    @AllArgsConstructor
+    public enum OperationMode {
+        COMPACT(CompactRepoStorage::new),
+        DEV(DirectoryStorage::new),
+        ;
+
+        final Function<Path, RepoStorage> repoStorageProvider;
+    }
+
+    public RepoInstance load(Path path, OperationMode mode) {
+        return new RepoInstance(mode.repoStorageProvider.apply(path));
+    }
 
 }
