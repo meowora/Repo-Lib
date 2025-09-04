@@ -8,6 +8,7 @@ import org.intellij.lang.annotations.Pattern;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import tech.thatgravyboat.repolib.core.utils.RepoCodec;
 import tech.thatgravyboat.repolib.core.utils.RepoUtils;
 
 public record RepoLocation(
@@ -15,7 +16,7 @@ public record RepoLocation(
         @Pattern("[a-z0-9_-]+") String path,
         @Pattern("[a-z0-9_-]+") @With @Nullable String variant
 ) {
-    public static Codec<RepoLocation> CODEC = Codec.STRING.xmap(RepoLocation::parse, RepoLocation::toString);
+    public static Codec<RepoLocation> CODEC = RepoCodec.STRING.xmap(RepoLocation::parse, RepoLocation::toString);
 
     @ApiStatus.Internal
     public RepoLocation {

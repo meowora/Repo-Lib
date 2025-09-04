@@ -1,14 +1,14 @@
 package tech.thatgravyboat.repolib.core.data;
 
-
 import com.mojang.serialization.Codec;
+import tech.thatgravyboat.repolib.core.utils.RepoCodec;
 
 /**
  * Simple copy of the minecraft resource location
  */
 public record MinecraftLocation(String namespace, String path) {
     public static final String DEFAULT_NAMESPACE = "minecraft";
-    public static Codec<MinecraftLocation> CODEC = Codec.STRING.xmap(MinecraftLocation::parse, MinecraftLocation::toString);
+    public static Codec<MinecraftLocation> CODEC = RepoCodec.STRING.xmap(MinecraftLocation::parse, MinecraftLocation::toString);
 
     public MinecraftLocation {
         assert isValidNamespace(namespace);

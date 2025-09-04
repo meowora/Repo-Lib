@@ -2,15 +2,14 @@ package tech.thatgravyboat.repolib.core.data.skins;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+import tech.thatgravyboat.repolib.core.utils.RepoCodec;
 
 public record StaticSkin(String skin) implements Skin {
     public static final String TYPE = "static";
-    public static final MapCodec<StaticSkin> MAP_CODEC = RecordCodecBuilder.mapCodec(it ->
-            it.group(
-                    Codec.STRING.fieldOf("skin").forGetter(StaticSkin::skin)
-            ).apply(it, StaticSkin::new)
-    );
+
+    public static final MapCodec<StaticSkin> MAP_CODEC = RepoCodec.STRING
+            .fieldOf("skin")
+            .xmap(StaticSkin::new, StaticSkin::skin);
     public static final Codec<StaticSkin> CODEC = MAP_CODEC.codec();
 
     @Override
