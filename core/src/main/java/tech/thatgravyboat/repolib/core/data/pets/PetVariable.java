@@ -7,12 +7,13 @@ import tech.thatgravyboat.repolib.core.utils.RepoCodec;
 
 public interface PetVariable {
 
-    Codec<PetVariable> CODEC = RepoCodec.STRING.dispatch(PetVariable::type, type -> switch (type) {
-        case Constant.TYPE -> Constant.CODEC;
-        case Conditional.TYPE -> Conditional.CODEC;
-        case Linear.TYPE -> Linear.CODEC;
-        default -> MapCodec.unit(Constant.ZERO);
-    });
+    Codec<PetVariable> CODEC = RepoCodec.STRING.dispatch(
+            PetVariable::type, type -> switch (type) {
+                case Constant.TYPE -> Constant.CODEC;
+                case Conditional.TYPE -> Conditional.CODEC;
+                case Linear.TYPE -> Linear.CODEC;
+                default -> MapCodec.unit(Constant.ZERO);
+            });
 
     double get(int level);
 
@@ -57,7 +58,7 @@ public interface PetVariable {
 
         @Override
         public double get(int level) {
-            var condition = false;
+            final boolean condition;
             switch (operator) {
                 case ">" -> condition = level > this.level;
                 case ">=" -> condition = level >= this.level;

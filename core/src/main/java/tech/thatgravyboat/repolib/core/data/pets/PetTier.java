@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public record PetTier(
-    Skin skin,
-    List<JsonElement> lore,
-    Map<String, PetVariable> variables
+        Skin skin,
+        List<JsonElement> lore,
+        Map<String, PetVariable> variables
 ) {
 }
