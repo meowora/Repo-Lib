@@ -33,7 +33,7 @@ public record Item(
                     RepoCodec.REPO_LOCATION.fieldOf("repo_id").forGetter(Item::repoId),
                     RepoCodec.JSON.fieldOf("name").forGetter(Item::name),
                     RepoCodec.JSON.listOf().fieldOf("lore").forGetter(Item::lore),
-                    Codec.unboundedMap(RepoCodec.STRING, self).optionalFieldOf("variants", Map.of()).forGetter(Item::variants),
+                    RepoCodec.map(RepoCodec.STRING, self).optionalFieldOf("variants", Map.of()).forGetter(Item::variants),
                     RepoCodec.SKIN.optionalFieldOf("skin").forGetter(RepoUtils.optionalGetter(Item::skin)),
                     RepoCodec.STRING.optionalFieldOf("variant_selector").forGetter(RepoUtils.optionalGetter(Item::variantSelector))
             ).apply(
