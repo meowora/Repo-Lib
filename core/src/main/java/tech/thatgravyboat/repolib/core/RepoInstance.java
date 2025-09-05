@@ -2,7 +2,10 @@ package tech.thatgravyboat.repolib.core;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.repolib.core.data.Item;
@@ -11,14 +14,17 @@ import tech.thatgravyboat.repolib.core.data.pets.Pet;
 import tech.thatgravyboat.repolib.core.data.skins.AnimatedSkinDefinition;
 import tech.thatgravyboat.repolib.core.storage.RepoStorage;
 import tech.thatgravyboat.repolib.core.utils.RepoType;
+import tech.thatgravyboat.repolib.core.utils.RepoUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
+@Getter
 public class RepoInstance {
     public final RepoStorage storage;
 
+    @Getter(AccessLevel.PRIVATE)
     private final Map<Class<?>, Map<RepoLocation, ?>> mapRegistry = new HashMap<>();
     private final Map<RepoLocation, Item> items = new HashMap<>();
     private final Map<RepoLocation, AnimatedSkinDefinition> animatedSkins = new HashMap<>();
@@ -65,5 +71,9 @@ public class RepoInstance {
                 throw new UnsupportedOperationException("Duplicate repoLocation found!");
             }
         });
+    }
+
+    public <T> @Nullable RepoLocation getLocation(DynamicOps<T> ops, T data) {
+        return RepoUtils.getRepoLocation(this, ops, data);
     }
 }
