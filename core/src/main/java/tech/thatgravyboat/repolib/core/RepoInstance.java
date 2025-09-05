@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import tech.thatgravyboat.repolib.core.data.RepoLocation;
 import tech.thatgravyboat.repolib.core.data.items.Item;
 import tech.thatgravyboat.repolib.core.data.pets.Pet;
+import tech.thatgravyboat.repolib.core.data.potions.Potion;
 import tech.thatgravyboat.repolib.core.data.skins.AnimatedSkinDefinition;
 import tech.thatgravyboat.repolib.core.storage.RepoStorage;
 import tech.thatgravyboat.repolib.core.utils.RepoType;
@@ -29,6 +30,7 @@ public class RepoInstance {
     private final Map<RepoLocation, Item> items = new HashMap<>();
     private final Map<RepoLocation, AnimatedSkinDefinition> animatedSkins = new HashMap<>();
     private final Map<RepoLocation, Pet> pets = new HashMap<>();
+    private final Map<RepoLocation, Potion> potions = new HashMap<>();
 
     public RepoInstance(RepoStorage storage) {
         this.storage = storage;
@@ -36,6 +38,7 @@ public class RepoInstance {
         registerAndParse(Item.class, items, Item.CODEC, "item");
         registerAndParse(AnimatedSkinDefinition.class, animatedSkins, AnimatedSkinDefinition.CODEC, "skin_definition");
         registerAndParse(Pet.class, pets, Pet.CODEC, "pet");
+        registerAndParse(Potion.class, potions, Potion.CODEC, "potion");
     }
 
     private <T extends RepoType<T>> void registerAndParse(
