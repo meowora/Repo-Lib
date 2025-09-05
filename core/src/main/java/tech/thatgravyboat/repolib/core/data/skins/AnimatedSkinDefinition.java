@@ -18,7 +18,7 @@ public record AnimatedSkinDefinition(
 
     public static Codec<AnimatedSkinDefinition> CODEC = RecordCodecBuilder.create(it ->
             it.group(
-                    RepoCodec.REPO_LOCATION.fieldOf("repo_location").forGetter(AnimatedSkinDefinition::repoLocation),
+                    RepoCodec.REPO_LOCATION.fieldOf("repo_id").forGetter(AnimatedSkinDefinition::repoLocation),
                     RepoCodec.INT.fieldOf("delay").forGetter(AnimatedSkinDefinition::delay),
                     RepoCodec.STRING.listOf().fieldOf("sequence").forGetter(AnimatedSkinDefinition::entries)
             ).apply(it, AnimatedSkinDefinition::new)

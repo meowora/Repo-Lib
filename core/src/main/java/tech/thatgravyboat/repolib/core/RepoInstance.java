@@ -8,8 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
-import tech.thatgravyboat.repolib.core.data.Item;
 import tech.thatgravyboat.repolib.core.data.RepoLocation;
+import tech.thatgravyboat.repolib.core.data.items.Item;
 import tech.thatgravyboat.repolib.core.data.pets.Pet;
 import tech.thatgravyboat.repolib.core.data.skins.AnimatedSkinDefinition;
 import tech.thatgravyboat.repolib.core.storage.RepoStorage;
@@ -33,12 +33,19 @@ public class RepoInstance {
     public RepoInstance(RepoStorage storage) {
         this.storage = storage;
 
-        register(Item.class, items);
-        register(AnimatedSkinDefinition.class, animatedSkins);
+        registerAndParse(Item.class, items, Item.CODEC, "item");
+        registerAndParse(AnimatedSkinDefinition.class, animatedSkins, AnimatedSkinDefinition.CODEC, "skin_definition");
+        registerAndParse(Pet.class, pets, Pet.CODEC, "pet");
+    }
 
-        //parseAll(storage.read("pet"), P, Item::repoLocation, items);
-        parseAll(storage.read("item"), Item.CODEC);
-        parseAll(storage.read("skin_definition"), AnimatedSkinDefinition.CODEC);
+    private <T extends RepoType<T>> void registerAndParse(
+            Class<T> type,
+            Map<RepoLocation, T> storage,
+            Codec<T> codec,
+            String namespace
+    ) {
+        register(type, storage);
+        parseAll(this.storage.read(namespace), codec);
     }
 
     private <T> void register(Class<T> type, Map<RepoLocation, T> map) {
