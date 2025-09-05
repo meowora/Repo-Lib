@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.UnboundedMapCodec;
 import org.jetbrains.annotations.ApiStatus;
 import tech.thatgravyboat.repolib.core.data.MinecraftLocation;
 import tech.thatgravyboat.repolib.core.data.RepoLocation;
+import tech.thatgravyboat.repolib.core.data.pets.Pet;
 import tech.thatgravyboat.repolib.core.data.skins.Skin;
 
 @ApiStatus.Internal
@@ -21,6 +22,7 @@ public interface RepoCodec extends Codec<Object> {
     Codec<RepoLocation> REPO_LOCATION = RepoLocation.CODEC;
     Codec<MinecraftLocation> RESOURCE_LOCATION = MinecraftLocation.CODEC;
     Codec<Skin> SKIN = Skin.CODEC;
+    Codec<Pet> PET = Pet.CODEC;
 
     static <K, V> UnboundedMapCodec<K, V> map(final Codec<K> keyCodec, final Codec<V> elementCodec) {
         return new UnboundedMapCodec<>(keyCodec, elementCodec);
