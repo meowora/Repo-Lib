@@ -27,6 +27,7 @@ public class RepoInstance {
 
     @Getter(AccessLevel.PRIVATE)
     private final Map<Class<?>, Map<RepoLocation, ?>> mapRegistry = new HashMap<>();
+
     private final Map<RepoLocation, Item> items = new HashMap<>();
     private final Map<RepoLocation, AnimatedSkinDefinition> animatedSkins = new HashMap<>();
     private final Map<RepoLocation, Pet> pets = new HashMap<>();
