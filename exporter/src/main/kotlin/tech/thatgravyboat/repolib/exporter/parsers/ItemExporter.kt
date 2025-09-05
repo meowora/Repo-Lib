@@ -16,10 +16,7 @@ import tech.thatgravyboat.skyblockapi.api.datatype.DataTypes
 import tech.thatgravyboat.skyblockapi.api.events.base.Subscription
 import tech.thatgravyboat.skyblockapi.api.events.base.predicates.MustBeContainer
 import tech.thatgravyboat.skyblockapi.api.events.screen.InventoryChangeEvent
-import tech.thatgravyboat.skyblockapi.utils.extentions.get
-import tech.thatgravyboat.skyblockapi.utils.extentions.getItemModel
-import tech.thatgravyboat.skyblockapi.utils.extentions.getRarityLineIndex
-import tech.thatgravyboat.skyblockapi.utils.extentions.getTexture
+import tech.thatgravyboat.skyblockapi.utils.extentions.*
 
 object ItemExporter {
     fun parseItem(itemStack: ItemStack) {
@@ -36,7 +33,10 @@ object ItemExporter {
             item.withVariants(mutableMapOf(location.variant() to itemStack.createItem(location)).apply { putAll(item.variants()) })
         } else item
 
-        RepoExporter.repo.put(finalItem)
+        RepoExporter.repo.put(
+            finalItem
+                .withLore(finalItem.lore.takeUnless { it.isEmpty() } ?: itemStack.lore())
+        )
     }
 
     fun ItemStack.createItem(location: RepoLocation) = Item(
@@ -53,9 +53,9 @@ object ItemExporter {
     )
 
     fun ItemStack.lore(): List<JsonElement> {
-        val line = this[DataComponents.LORE]?.styledLines ?: return emptyList()
+        val line = this.getLore().takeUnless { it.isEmpty() } ?: return emptyList()
         if (getRarityLineIndex() == -1) return emptyList()
-        return line.subList(0, getRarityLineIndex()).map { it.serialize() }
+        return line.subList(0, getRarityLineIndex() + 1).map { it.serialize() }
     }
 
     @Subscription

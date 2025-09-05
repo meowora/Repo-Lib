@@ -65,7 +65,7 @@ public class RepoUtils {
             return null;
         }
 
-        val id = lowercase(optionalId.get());
+        val id = lowercase(optionalId.get()).replace(';', '-').replace(':', '-');
         return switch (id) {
             case "potion" -> {
                 val potionTypeOptional = getString(ops, map, "potion_type");
