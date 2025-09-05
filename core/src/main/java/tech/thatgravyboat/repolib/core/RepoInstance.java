@@ -19,6 +19,7 @@ import tech.thatgravyboat.repolib.core.utils.RepoUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 
 @Getter
@@ -26,7 +27,7 @@ public class RepoInstance {
     public final RepoStorage storage;
 
     @Getter(AccessLevel.PRIVATE)
-    private final Map<Class<?>, Map<RepoLocation, ?>> mapRegistry = new HashMap<>();
+    private final Map<Object, Map<RepoLocation, ?>> mapRegistry = new HashMap<>();
 
     private final Map<RepoLocation, Item> items = new HashMap<>();
     private final Map<RepoLocation, AnimatedSkinDefinition> animatedSkins = new HashMap<>();
@@ -48,12 +49,13 @@ public class RepoInstance {
             Codec<T> codec,
             String namespace
     ) {
-        register(type, storage);
+        register(type, namespace, storage);
         parseAll(this.storage.read(namespace), codec);
     }
 
-    private <T> void register(Class<T> type, Map<RepoLocation, T> map) {
+    private <T> void register(Class<T> type, String namespace, Map<RepoLocation, T> map) {
         mapRegistry.put(type, map);
+        mapRegistry.put(namespace, map);
     }
 
     public <T extends RepoType<T>> void put(T value) {
@@ -63,8 +65,11 @@ public class RepoInstance {
     }
 
     private <T> Map<RepoLocation, T> getMap(T value) {
-        //noinspection unchecked
-        return (Map<RepoLocation, T>) mapRegistry.get(value.getClass());
+        return RepoUtils.unsafeCast(mapRegistry.get(value.getClass()));
+    }
+
+    private Map<RepoLocation, ?> getMap(String namespace) {
+        return RepoUtils.unsafeCast(mapRegistry.get(namespace));
     }
 
     private @Nullable <T extends RepoType<T>> T set(T value) {
@@ -86,5 +91,11 @@ public class RepoInstance {
 
     public <T> @Nullable RepoLocation getLocation(DynamicOps<T> ops, T data) {
         return RepoUtils.getRepoLocation(this, ops, data);
+    }
+
+    public <T extends RepoType<T>> T getOrPut(RepoLocation location, Supplier<T> provider) {
+        Map<RepoLocation, T> map = RepoUtils.unsafeCast(getMap(location.namespace()));
+
+        return map.computeIfAbsent(location, ignored -> provider.get());
     }
 }

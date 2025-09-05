@@ -34,7 +34,7 @@ public class RepoUtils {
     }
 
     public <T> Optional<String> getString(DynamicOps<T> ops, MapLike<T> map, String field) {
-        return ops.getStringValue(map.get(field)).result();
+        return Optional.ofNullable(map.get(field)).map(ops::getStringValue).flatMap(DataResult::result);
     }
 
     public <T> Optional<JsonObject> getJsonObject(DynamicOps<T> ops, MapLike<T> map, String field) {
@@ -42,14 +42,14 @@ public class RepoUtils {
     }
 
     public <T> boolean getBoolean(DynamicOps<T> ops, MapLike<T> map, String field) {
-        return ops.getBooleanValue(map.get(field)).result().orElse(false);
+        return Optional.ofNullable(map.get(field)).map(ops::getBooleanValue).flatMap(DataResult::result).orElse(false);
     }
 
     public <T> Optional<String> getField(DynamicOps<T> ops, MapLike<T> map, String field) {
-        val number = ops.getNumberValue(map.get(field));
-        val string = ops.getStringValue(map.get(field));
+        val number = Optional.ofNullable(map.get(field)).map(ops::getNumberValue).flatMap(DataResult::result);
+        val string = getString(ops, map, field);
 
-        return number.map(Number::toString).mapOrElse(DataResult::success, ignored -> string).result();
+        return number.map(Number::toString).or(() -> string);
     }
 
     @Nullable
@@ -118,7 +118,12 @@ public class RepoUtils {
         return RepoLocation.fromNamespaceAndPath("potion", path);
     }
 
-    public <F, T> Function<F, Optional<T>> optionalGetter(Function<F, T> mapper) {
+    public <F, T> T unsafeCast(F from) {
+        //noinspection unchecked
+        return (T) from;
+    }
+
+    public <F, T> Function<F, Optional<T>> optionalGetter(Function<F, @Nullable T> mapper) {
         return instance -> Optional.ofNullable(mapper.apply(instance));
     }
 

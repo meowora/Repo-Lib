@@ -25,6 +25,7 @@ public record Item(
         JsonElement name,
         List<JsonElement> lore,
         ExtraData extraData,
+        boolean enchanted,
         Map<String, Item> variants,
         @Nullable Skin skin,
         @Nullable String variantSelector
@@ -38,6 +39,7 @@ public record Item(
                     RepoCodec.JSON.fieldOf("name").forGetter(Item::name),
                     RepoCodec.JSON.listOf().fieldOf("lore").forGetter(Item::lore),
                     ExtraData.MAP_CODEC.forGetter(Item::extraData),
+                    RepoCodec.BOOL.optionalFieldOf("enchanted", false).forGetter(Item::enchanted),
                     RepoCodec.map(RepoCodec.STRING, self)
                             .optionalFieldOf("variants", java.util.Map.of())
                             .forGetter(Item::variants),
@@ -45,13 +47,14 @@ public record Item(
                     RepoCodec.STRING.optionalFieldOf("variant_selector").forGetter(RepoUtils.optionalGetter(Item::variantSelector))
             ).apply(
                     it,
-                    (model, skyblockId, repoId, name, lore, extraData, variants, skin, selector) -> new Item(
+                    (model, skyblockId, repoId, name, lore, extraData, enchanted, variants, skin, selector) -> new Item(
                             model,
                             skyblockId,
                             repoId,
                             name,
                             lore,
                             extraData,
+                            enchanted,
                             variants,
                             skin.orElse(null),
                             selector.orElse(null)

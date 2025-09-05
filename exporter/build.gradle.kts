@@ -12,6 +12,8 @@ repositories {
         maven("https://repo.hypixel.net/repository/Hypixel/")
         maven("https://api.modrinth.com/maven")
         maven("https://maven.teamresourceful.com/repository/maven-public")
+        maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+
 
         mavenParchment()
         mavenFabric()
@@ -34,9 +36,7 @@ cloche {
     singleTarget {
         fabric {
             dependencies {
-                implementation("tech.thatgravyboat:skyblock-api:2.3.4") {
-                    exclude("me.djtheredstoner")
-                }
+                implementation("tech.thatgravyboat:skyblock-api:2.3.4")
             }
             metadata {
                 entrypoint("client") {
